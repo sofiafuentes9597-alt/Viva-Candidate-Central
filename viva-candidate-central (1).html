@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viva | Candidate Readiness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF7F1;
+    --panel:#FFFFFF;
+    --panel-2:#FFEFE4;
+    --ink:#2B2140;
+    --muted:#7C7391;
+    --pink:#FF6F91;
+    --violet:#8C6FFF;
+    --teal:#22B8A0;
+    --gold:#FFB648;
+    --coral:#FF8A65;
+    --border:rgba(43,33,64,0.09);
+    --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  h1,h2,h3{font-family:'Poppins',sans-serif; font-weight:600; letter-spacing:-0.01em;}
+  .label{font-family:'Inter',sans-serif; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+
+  /* decorative blobs */
+  .blob{position:absolute; border-radius:50%; filter:blur(50px); opacity:0.35; z-index:0; pointer-events:none;}
+  .b1{width:340px; height:340px; background:var(--pink); top:-100px; right:-100px;}
+  .b2{width:280px; height:280px; background:var(--teal); top:900px; left:-120px;}
+  .b3{width:320px; height:320px; background:var(--gold); top:1900px; right:-140px;}
+  .b4{width:260px; height:260px; background:var(--violet); top:2900px; left:-100px;}
+
+  .watermark{
+    position:absolute; top:20px; left:-60px; z-index:0; pointer-events:none;
+    width:520px; height:520px; opacity:0.07; transform:rotate(-4deg);
+  }
+
+  /* status bar */
+  #statusbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,247,241,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+    padding:12px 20px;
+  }
+  #statusbar .row{
+    max-width:980px; margin:0 auto;
+    display:flex; align-items:center; gap:14px;
+  }
+  #statusbar .label{font-size:11px; color:var(--muted); white-space:nowrap;}
+  #track{flex:1; height:6px; background:var(--panel-2); border-radius:4px; overflow:hidden;}
+  #fill{height:100%; width:0%; background:linear-gradient(90deg,var(--pink),var(--gold)); transition:width .1s linear;}
+  #pct{font-size:11px; color:var(--teal); font-weight:600; min-width:34px; text-align:right;}
+  #dots{display:flex; gap:6px; margin-left:8px;}
+  #dots span{width:7px;height:7px;border-radius:50%;background:var(--panel-2); transition:.2s;}
+  #dots span.active{background:var(--pink);}
+  @media(max-width:680px){#dots{display:none;}}
+
+  section{max-width:900px; margin:0 auto; padding:64px 22px; position:relative; z-index:1;}
+
+  /* hero */
+  #hero{padding-top:56px; padding-bottom:56px; position:relative;}
+  .eyebrow{
+    display:inline-block; font-size:11px; color:var(--teal);
+    border:1px solid rgba(34,184,160,0.35); border-radius:20px; background:#fff;
+    padding:6px 14px; margin-bottom:22px;
+  }
+  #hero h1{font-size:clamp(30px,5vw,52px); line-height:1.14; max-width:12ch; position:relative;}
+  #hero h1 em{font-style:normal; color:var(--pink);}
+  #hero p.sub{margin-top:18px; max-width:52ch; color:var(--muted); font-size:17px;}
+  .scan{margin-top:34px; display:flex; gap:22px; flex-wrap:wrap;}
+  .scan-item{font-size:12px; color:var(--muted);}
+  .scan-item b{color:var(--ink); display:block; font-family:'Poppins'; font-size:16px;}
+
+  /* section headers */
+  .khead{display:flex; align-items:baseline; gap:12px; margin-bottom:8px;}
+  .kno{font-size:12px; color:var(--coral); font-weight:700;}
+  .khead h2{font-size:clamp(22px,3.2vw,30px);}
+  .kdesc{color:var(--muted); max-width:56ch; margin-bottom:34px; font-size:15px;}
+
+  /* module 1: EA profile card */
+  #ea{display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;}
+  @media(max-width:760px){#ea{grid-template-columns:1fr;}}
+  #ea p{color:var(--muted); margin-bottom:14px;}
+  #ea .pillrow{display:flex; gap:8px; flex-wrap:wrap; margin-top:20px;}
+  .pill{font-size:12px; background:#fff; border:1px solid var(--border); padding:7px 14px; border-radius:20px; color:var(--ink); font-weight:500; box-shadow:0 2px 6px rgba(43,33,64,0.04);}
+  .card{
+    background:#fff; border:1px solid var(--border); border-radius:var(--radius);
+    padding:22px; box-shadow:0 8px 24px rgba(43,33,64,0.06);
+  }
+  .card .top{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .card .who{font-family:'Poppins'; font-size:16px;}
+  .card .who span{display:block; font-family:'Inter'; font-size:12px; color:var(--muted); font-weight:400; margin-top:2px;}
+  .status-dot{width:9px;height:9px;border-radius:50%;background:var(--teal); box-shadow:0 0 8px var(--teal);}
+  .taskline{display:flex; gap:10px; padding:10px 0; border-top:1px solid var(--border); font-size:13px; color:var(--muted);}
+  .taskline:first-of-type{border-top:none;}
+  .taskline b{color:var(--ink); font-weight:600; min-width:110px;}
+
+  /* module 2: day to day flip tiles */
+  .tiles{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:640px){.tiles{grid-template-columns:1fr;}}
+  .flip-outer{perspective:1200px; height:170px; cursor:pointer;}
+  .flip-inner{position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;}
+  .flip-outer.open .flip-inner{transform:rotateY(180deg);}
+  .face{
+    position:absolute; inset:0; border-radius:var(--radius); padding:20px;
+    backface-visibility:hidden; display:flex; flex-direction:column; justify-content:center;
+    box-shadow:0 8px 20px rgba(43,33,64,0.08);
+  }
+  .face.front{color:#fff;}
+  .face.back{transform:rotateY(180deg); background:#fff; border:1px solid var(--border); justify-content:flex-start;}
+  .tno{font-size:11px; font-weight:700; opacity:0.85; letter-spacing:0.06em; text-transform:uppercase;}
+  .face.front h3{font-size:19px; margin-top:8px; color:#fff;}
+  .flipcue{font-size:11px; margin-top:auto; opacity:0.85;}
+  .face.back .tag{font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:8px;}
+  .face.back .short{color:var(--ink); font-size:13.5px; margin-bottom:8px;}
+  .face.back .example{font-size:12.5px; color:var(--muted); font-style:italic;}
+
+  .modA{background:linear-gradient(135deg,var(--pink),#ff9db3);}
+  .modB{background:linear-gradient(135deg,var(--violet),#b39dff);}
+  .modC{background:linear-gradient(135deg,var(--teal),#5fd9c4);}
+  .modD{background:linear-gradient(135deg,var(--gold),#ffcf85);}
+  .tagA{color:var(--pink);} .tagB{color:var(--violet);} .tagC{color:var(--teal);} .tagD{color:#c98a1c;}
+
+  .beyond{
+    margin-top:30px; padding:30px; border-radius:var(--radius);
+    background:linear-gradient(135deg,var(--violet),var(--pink));
+    color:#fff;
+  }
+  .beyond .btag{font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; opacity:0.85;}
+  .beyond h3{color:#fff; font-size:clamp(20px,3vw,26px); margin-top:8px; line-height:1.35;}
+
+  /* module 3: why viva */
+  .statline{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:30px;
+    padding:22px; background:#fff; border-radius:var(--radius); border:1px solid var(--border);
+    box-shadow:0 8px 20px rgba(43,33,64,0.06);
+  }
+  .statline .n{font-family:'Poppins'; font-size:40px; color:var(--pink); font-weight:700;}
+  .statline .t{color:var(--muted); font-size:13.5px; max-width:44ch;}
+
+  .values{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px;}
+  .value{
+    background:#fff; border:1px solid var(--border); border-radius:12px;
+    padding:14px; width:calc(20% - 8px); min-width:150px; cursor:default;
+    box-shadow:0 4px 12px rgba(43,33,64,0.05);
+  }
+  .value .vname{font-size:13px; font-weight:700; color:var(--ink);}
+  .value .vdesc{font-size:12.5px; color:var(--muted); margin-top:6px; display:none;}
+  .value:hover .vdesc{display:block;}
+  .value:nth-child(1){border-top:3px solid var(--pink);}
+  .value:nth-child(2){border-top:3px solid var(--violet);}
+  .value:nth-child(3){border-top:3px solid var(--teal);}
+  .value:nth-child(4){border-top:3px solid var(--gold);}
+  .value:nth-child(5){border-top:3px solid var(--coral);}
+  @media(max-width:700px){.value{width:calc(50% - 5px);}}
+
+  .benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  @media(max-width:700px){.benefits{grid-template-columns:repeat(2,1fr);}}
+  .benefit{
+    border:1px solid var(--border); border-radius:12px; padding:14px 10px; font-size:12.5px;
+    color:var(--muted); text-align:center; background:#fff;
+  }
+  .benefit b{display:block; color:var(--ink); font-size:13px; margin-bottom:2px; font-family:'Poppins'; font-weight:500;}
+
+  /* module 4: process timeline */
+  .steps{position:relative; padding-left:28px;}
+  .steps::before{content:''; position:absolute; left:10px; top:6px; bottom:6px; width:2px; background:var(--border);}
+  .step{position:relative; margin-bottom:6px;}
+  .step .head{
+    display:flex; align-items:center; gap:12px; cursor:pointer; padding:12px 0;
+  }
+  .step .num{
+    position:absolute; left:-28px; width:22px; height:22px; border-radius:50%;
+    background:var(--pink); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700;
+  }
+  .step .stitle{font-family:'Poppins'; font-size:16px;}
+  .step .sdur{font-size:11px; color:var(--muted); font-weight:600; margin-left:auto; padding-right:14px;}
+  .step .chev{color:var(--muted); font-size:12px; transition:.2s;}
+  .step.open .chev{transform:rotate(90deg);}
+  .step .body{max-height:0; overflow:hidden; transition:.25s;}
+  .step.open .body{max-height:220px;}
+  .step .body-in{padding:0 0 18px 0; color:var(--muted); font-size:13.5px;}
+  .tip{
+    margin-top:10px; padding:10px 12px; background:var(--panel-2); border-left:3px solid var(--gold);
+    border-radius:8px; font-size:12.5px; color:var(--ink);
+  }
+
+  /* module 5: FAQ */
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{
+    padding:16px 0; display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; font-family:'Poppins'; font-size:15px;
+  }
+  .faq-q .chev{color:var(--pink); font-size:15px; transition:.2s; font-weight:700;}
+  .faq-item.open .chev{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:.3s; color:var(--muted); font-size:13.5px;}
+  .faq-item.open .faq-a{max-height:420px; padding-bottom:16px;}
+  .growth-path{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .gstep{background:var(--panel-2); border-radius:8px; padding:8px 12px; font-size:12px; color:var(--ink); font-weight:600;}
+  .garrow{color:var(--muted); align-self:center;}
+  .spec-table{width:100%; border-collapse:collapse; margin-top:10px; font-size:12.5px;}
+  .spec-table td{padding:6px 8px; border-bottom:1px solid var(--border); vertical-align:top;}
+  .spec-table td:first-child{font-weight:600; color:var(--ink); width:34%;}
+
+  .video-wrap{
+    position:relative; display:block; width:100%; padding-top:56.25%; border-radius:var(--radius);
+    overflow:hidden; box-shadow:0 8px 24px rgba(43,33,64,0.1); border:1px solid var(--border);
+    background:linear-gradient(135deg,var(--violet),var(--pink));
+  }
+  .video-wrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .play-overlay{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(43,33,64,0.25); transition:.2s background;
+  }
+  .video-wrap:hover .play-overlay{background:rgba(43,33,64,0.4);}
+  .play-btn{
+    width:64px; height:64px; border-radius:50%; background:var(--pink); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    box-shadow:0 6px 20px rgba(255,111,145,0.5); transition:.2s transform;
+  }
+  .video-wrap:hover .play-btn{transform:scale(1.08);}
+
+  /* resources */
+  .resources{
+    max-width:900px; margin:0 auto; padding:0 22px 8px; position:relative; z-index:1;
+  }
+  .res-head{font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;}
+  .res-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  @media(max-width:700px){.res-grid{grid-template-columns:repeat(2,1fr);}}
+  .res-card{
+    background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px;
+    text-decoration:none; display:block; box-shadow:0 4px 12px rgba(43,33,64,0.05); transition:.2s transform;
+  }
+  .res-card:hover{transform:translateY(-2px);}
+  .res-icon{font-size:18px; margin-bottom:6px;}
+  .res-name{font-family:'Poppins'; font-size:13px; color:var(--ink); font-weight:600;}
+  .res-sub{font-size:11px; color:var(--muted); margin-top:2px;}
+
+  /* anchor callout */
+  .anchor-box{
+    max-width:900px; margin:0 auto; padding:24px 26px; background:#fff; border-radius:var(--radius);
+    border:1px solid var(--border); box-shadow:0 8px 20px rgba(43,33,64,0.06);
+  }
+  .anchor-tag{font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--coral); margin-bottom:14px;}
+  .anchor-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media(max-width:700px){.anchor-grid{grid-template-columns:1fr;}}
+  .anchor-item{font-size:13.5px; color:var(--ink); line-height:1.5;}
+  .anum{
+    display:inline-flex; width:20px; height:20px; border-radius:50%; background:var(--panel-2);
+    color:var(--coral); font-size:11px; font-weight:700; align-items:center; justify-content:center;
+    margin-right:8px; vertical-align:middle;
+  }
+
+  /* quiz */
+  .quiz-score{
+    display:inline-block; font-size:12px; font-weight:700; color:var(--teal);
+    background:#fff; border:1px solid var(--border); border-radius:20px; padding:6px 14px; margin-bottom:24px;
+  }
+  .qcard{
+    background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:20px;
+    margin-bottom:14px; box-shadow:0 6px 16px rgba(43,33,64,0.05);
+  }
+  .qtext{font-family:'Poppins'; font-size:15px; margin-bottom:14px;}
+  .qopts{display:grid; gap:8px;}
+  .qopt{
+    text-align:left; border:1px solid var(--border); background:var(--bg); border-radius:10px;
+    padding:10px 14px; font-size:13.5px; font-family:'Inter'; color:var(--ink); cursor:pointer; transition:.15s;
+  }
+  .qopt:hover{border-color:var(--violet);}
+  .qopt.correct{background:rgba(34,184,160,0.12); border-color:var(--teal); font-weight:600;}
+  .qopt.wrong{background:rgba(255,111,145,0.12); border-color:var(--pink);}
+  .qopt.disabled{pointer-events:none;}
+  .qexplain{margin-top:12px; font-size:12.5px; color:var(--muted); display:none;}
+  .qexplain.show{display:block;}
+
+  /* referral */
+  .referral{
+    max-width:900px; margin:0 auto; padding:0 22px 20px; position:relative; z-index:1;
+  }
+  .referral-card{
+    background:linear-gradient(135deg,var(--gold),var(--coral)); border-radius:var(--radius);
+    padding:26px; color:#fff;
+  }
+  .referral-card .rtag{font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; opacity:0.9;}
+  .referral-card h3{color:#fff; font-size:20px; margin:8px 0 8px;}
+  .referral-card p{font-size:13.5px; opacity:0.95; max-width:60ch;}
+  .referral-card .amt{display:inline-block; margin-top:12px; background:rgba(255,255,255,0.25); padding:8px 14px; border-radius:20px; font-weight:700; font-size:13px;}
+
+  footer{
+    border-top:1px solid var(--border); padding:40px 22px; text-align:center; position:relative; z-index:1;
+  }
+  footer .note{
+    max-width:520px; margin:0 auto 18px; font-size:12px; color:var(--muted);
+    background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px 16px;
+  }
+  footer .note b{color:var(--coral);}
+  footer .sign{font-size:13px; color:var(--muted);}
+  footer .sign b{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+<div class="blob b4"></div>
+<svg class="watermark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6F91"/>
+      <stop offset="55%" stop-color="#8C6FFF"/>
+      <stop offset="100%" stop-color="#22B8A0"/>
+    </linearGradient>
+  </defs>
+  <path d="M60 60 L195 320 L330 60" fill="none" stroke="url(#vgrad)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="195" cy="358" r="16" fill="#FFB648"/>
+</svg>
+
+<div id="statusbar">
+  <div class="row">
+    <span class="label" style="font-size:11px; color:var(--muted);">READINESS</span>
+    <div id="track"><div id="fill"></div></div>
+    <span id="pct">0%</span>
+    <div id="dots">
+      <span data-t="ea"></span><span data-t="day"></span><span data-t="why"></span><span data-t="process"></span><span data-t="faq"></span><span data-t="quiz"></span>
+    </div>
+  </div>
+</div>
+
+<section id="hero">
+  <span class="eyebrow label">CANDIDATE CENTRAL</span>
+  <h1>You're applying to become someone's <em>second brain.</em></h1>
+  <p class="sub">Six short modules. Everything you need to walk into every round of Viva's process already sounding like you work here.</p>
+  <div class="scan">
+    <div class="scan-item"><b>~6 min</b>read time</div>
+    <div class="scan-item"><b>5 stages</b>to an offer</div>
+    <div class="scan-item"><b>3 execs</b>max per EA</div>
+    <div class="scan-item"><b>1,000</b>jobs, the mission</div>
+  </div>
+</section>
+
+<section style="padding-top:0; padding-bottom:0;">
+  <div class="anchor-box">
+    <div class="anchor-tag">If you remember 3 things</div>
+    <div class="anchor-grid">
+      <div class="anchor-item"><span class="anum">1</span>An EA is a strategic partner, not admin support — you protect an executive's time and focus.</div>
+      <div class="anchor-item"><span class="anum">2</span>Viva's mission: 1,000 meaningful jobs for women across Latin America.</div>
+      <div class="anchor-item"><span class="anum">3</span>5 stages to an offer, roughly a week or two start to finish if you move quickly.</div>
+    </div>
+  </div>
+</section>
+
+<section id="ea">
+  <div>
+    <div class="khead"><span class="kno">01</span><h2>What is an EA, really?</h2></div>
+    <p>Not "admin support." At Viva, an Executive Assistant is a <b style="color:var(--ink)">strategic partner</b> to founders and C-suite leaders at fast-growing US and Canadian startups.</p>
+    <p>You're the person who makes sure nothing important slips — the one keeping their time, focus, and follow-through intact while they build.</p>
+    <div class="pillrow">
+      <span class="pill">Saves time</span>
+      <span class="pill">Keeps things organized</span>
+      <span class="pill">Protects focus</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="top">
+      <div class="who">EA · Ana R.<span>Supporting 2 execs · CEO + COO</span></div>
+      <div class="status-dot"></div>
+    </div>
+    <div class="taskline"><b>09:14</b> Rebuilt CEO's week after a client call ran long</div>
+    <div class="taskline"><b>10:30</b> Flagged a travel conflict before it became a problem</div>
+    <div class="taskline"><b>13:00</b> Prepped board deck notes for COO review</div>
+    <div class="taskline"><b>16:45</b> Sent a heads-up nobody asked for — but needed</div>
+  </div>
+</section>
+
+<section id="day">
+  <div class="khead"><span class="kno">02</span><h2>What you'll actually do</h2></div>
+  <p class="kdesc">Flip each card. Every EA role touches these four areas — plus a fifth layer that goes beyond admin work entirely.</p>
+  <div class="tiles">
+    <div class="flip-outer" onclick="this.classList.toggle('open')">
+      <div class="flip-inner">
+        <div class="face front modA"><div class="tno">Module A</div><h3>Calendar & Email</h3><div class="flipcue">Tap to flip →</div></div>
+        <div class="face back"><div class="tag tagA">Calendar & Email</div><div class="short">Keep schedules and inboxes moving without your exec having to think about it.</div><div class="example">e.g. rebooking a flight before they even notice the delay</div></div>
+      </div>
+    </div>
+    <div class="flip-outer" onclick="this.classList.toggle('open')">
+      <div class="flip-inner">
+        <div class="face front modB"><div class="tno">Module B</div><h3>Travel & Expense</h3><div class="flipcue">Tap to flip →</div></div>
+        <div class="face back"><div class="tag tagB">Travel & Expense</div><div class="short">Plan trips that run smoothly and keep spending clean and trackable.</div><div class="example">e.g. a 3-city trip with zero layover stress</div></div>
+      </div>
+    </div>
+    <div class="flip-outer" onclick="this.classList.toggle('open')">
+      <div class="flip-inner">
+        <div class="face front modC"><div class="tno">Module C</div><h3>Meetings & Presentations</h3><div class="flipcue">Tap to flip →</div></div>
+        <div class="face back"><div class="tag tagC">Meetings & Presentations</div><div class="short">Prep the room, the deck, the notes — and sometimes lead the meeting yourself.</div><div class="example">e.g. running a standup when your exec is mid-flight</div></div>
+      </div>
+    </div>
+    <div class="flip-outer" onclick="this.classList.toggle('open')">
+      <div class="flip-inner">
+        <div class="face front modD"><div class="tno">Module D</div><h3>Team & Events</h3><div class="flipcue">Tap to flip →</div></div>
+        <div class="face back"><div class="tag tagD">Team & Events</div><div class="short">Keep the wider team connected through offsites, rituals, and small moments.</div><div class="example">e.g. planning a team offsite from scratch, remotely</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="beyond">
+    <div class="btag">Beyond the tiles</div>
+    <h3>You'll also streamline processes, turn raw data into decision-ready reports, and take on whatever new challenge the day throws at you. Every day is a little different.</h3>
+  </div>
+</section>
+
+<section id="why">
+  <div class="khead"><span class="kno">03</span><h2>Why candidates join Viva</h2></div>
+
+  <div class="statline">
+    <span class="n">1,000</span>
+    <span class="t">meaningful jobs for women across Latin America — Viva's mission, not a marketing line. It's what a UN Sustainable Development Goal (#5, gender equality) looks like in practice.</span>
+  </div>
+
+  <div class="kdesc" style="margin-bottom:12px;">Five values guide how the team works. Hover each one.</div>
+  <div class="values">
+    <div class="value"><div class="vname">Drive Fast</div><div class="vdesc">Ownership, speed, adaptability — turn challenges into outcomes.</div></div>
+    <div class="value"><div class="vname">Empower Each Other</div><div class="vdesc">Share the journey, the accountability, and the credit.</div></div>
+    <div class="value"><div class="vname">Embrace Feedback</div><div class="vdesc">A two-way gift for growth, given with respect.</div></div>
+    <div class="value"><div class="vname">Customer Obsession</div><div class="vdesc">Understand and delight the people you support, always.</div></div>
+    <div class="value"><div class="vname">Use Your Voice</div><div class="vdesc">Champion big ideas, let the best ones win.</div></div>
+  </div>
+
+  <div class="kdesc" style="margin-bottom:12px;">And the practical stuff:</div>
+  <div class="benefits">
+    <div class="benefit"><b>Fully remote</b>Work from anywhere</div>
+    <div class="benefit"><b>Fixed hours</b>No weekends, no overtime</div>
+    <div class="benefit"><b>Global health cover</b>Wherever you are</div>
+    <div class="benefit"><b>Semi-annual raises</b>Performance recognized</div>
+    <div class="benefit"><b>5-week training</b>Viva University, self-paced</div>
+    <div class="benefit"><b>Real PTO</b>Time to actually rest</div>
+  </div>
+
+  <div class="kdesc" style="margin:30px 0 12px;">Hear it from someone who lives it:</div>
+  <a class="video-wrap" href="https://www.youtube.com/watch?v=OuNhNp6KrY0" target="_blank" rel="noopener">
+    <img src="https://i.ytimg.com/vi/OuNhNp6KrY0/hqdefault.jpg"
+         onerror="this.onerror=null; this.src='https://i.ytimg.com/vi/OuNhNp6KrY0/mqdefault.jpg';"
+         alt="Viva testimonial video thumbnail">
+    <div class="play-overlay"><div class="play-btn">▶</div></div>
+  </a>
+</section>
+
+<section id="process">
+  <div class="khead"><span class="kno">04</span><h2>Your path to an offer</h2></div>
+  <p class="kdesc">A real sequence — five stages, in order. Tap each to expand.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="num">1</span>
+        <span class="stitle">Submit your application</span>
+        <span class="sdur">10–15 min</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="body"><div class="body-in">
+        A short form with your resume, in English. Be honest — it helps everyone move faster.
+        <div class="tip">Before you apply: skim Viva's mission and the EA job description so you can speak to fit right away.</div>
+      </div></div>
+    </div>
+    <div class="step">
+      <div class="head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="num">2</span>
+        <span class="stitle">Screening assessment</span>
+        <span class="sdur">15–20 min</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="body"><div class="body-in">
+        A short video or voice note on your communication style, plus a 1-minute typing test.
+        <div class="tip">Use a computer, keep a steady pace, and be concise — this is your first impression.</div>
+      </div></div>
+    </div>
+    <div class="step">
+      <div class="head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="num">3</span>
+        <span class="stitle">Group interview</span>
+        <span class="sdur">30 min</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="body"><div class="body-in">
+        A group session with the People Team, focused on communication and genuine enthusiasm.
+        <div class="tip">Bring a question or two — curiosity about the role reads as much as your answers do.</div>
+      </div></div>
+    </div>
+    <div class="step">
+      <div class="head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="num">4</span>
+        <span class="stitle">Skills assessment</span>
+        <span class="sdur">2 hrs · 24-hr window</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="body"><div class="body-in">
+        Built to surface a driver mindset, critical thinking, and intuition — how you make judgment calls.
+        <div class="tip">Find a quiet space. Precision and proactive problem-solving matter more than speed here.</div>
+      </div></div>
+    </div>
+    <div class="step">
+      <div class="head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="num">5</span>
+        <span class="stitle">Final interview</span>
+        <span class="sdur">30 min</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="body"><div class="body-in">
+        Roleplay scenarios that ask you to think like the executive you'd be supporting.
+        <div class="tip">Offer more than one solution per scenario, and stay calm — composure is part of the evaluation.</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="khead"><span class="kno">05</span><h2>Fast answers</h2></div>
+  <div class="faqlist">
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many executives will I support?<span class="chev">+</span></div>
+      <div class="faq-a">Up to three, from a single company — most EAs support one to two.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Who do I report to as an EA?<span class="chev">+</span></div>
+      <div class="faq-a">During training, an onboarding buddy supports and guides you. Once you're matched with an executive, a Customer Success Manager becomes your leader — focused specifically on your growth and success.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there real growth potential?<span class="chev">+</span></div>
+      <div class="faq-a">Yes — Viva aims for accelerated promotion, with the Executive Team flagging candidates directly. A typical path looks like:
+        <div class="growth-path">
+          <span class="gstep">Executive Assistant</span><span class="garrow">→</span>
+          <span class="gstep">Senior EA (yr 1–2)</span><span class="garrow">→</span>
+          <span class="gstep">Chief of Staff I (+2 yrs)</span><span class="garrow">→</span>
+          <span class="gstep">Chief of Staff II (+2 yrs)</span>
+        </div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I work part-time alongside another job or school?<span class="chev">+</span></div>
+      <div class="faq-a">No — this is a full-time, exclusive commitment.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What are the actual work hours?<span class="chev">+</span></div>
+      <div class="faq-a">40–45 hrs/week, mostly 8am–5pm local time, adjustable by up to 2 hours for your executive's needs.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What tech and workspace do I need?<span class="chev">+</span></div>
+      <div class="faq-a">
+        <table class="spec-table">
+          <tr><td>Internet</td><td>25 Mbps+ down, 5 Mbps+ up</td></tr>
+          <tr><td>Computer</td><td>Windows 10+ or macOS 10.14+, 8GB RAM+, 1280×720 screen</td></tr>
+          <tr><td>Camera</td><td>Built-in or USB webcam, 720p HD</td></tr>
+          <tr><td>Audio</td><td>Speakers + mic, built-in, USB, or wireless</td></tr>
+          <tr><td>Workspace</td><td>Quiet, professional, distraction-free with noise suppression</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do you only hire women?<span class="chev">+</span></div>
+      <div class="faq-a">No. The mission centers women's empowerment, but the team welcomes qualified candidates of all genders — men already thrive here too.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I get a work laptop?<span class="chev">+</span></div>
+      <div class="faq-a">A company MacBook arrives after your ~8-week probation. You'll need your own computer until then.</div>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="khead"><span class="kno">06</span><h2>Self-check: could you explain it right now?</h2></div>
+  <p class="kdesc">Five quick questions. This is where reading turns into being able to actually say it out loud.</p>
+  <div id="quiz-score" class="quiz-score">0 / 5 correct</div>
+  <div id="quiz-root"></div>
+</section>
+
+<div class="resources">
+  <div class="res-head">A few more resources</div>
+  <div class="res-grid">
+    <a class="res-card" href="https://drive.google.com/file/d/1VuZSnKSDGY2fUXcu_rLGS2mszXlRtmcL/view" target="_blank" rel="noopener">
+      <div class="res-icon">📄</div>
+      <div class="res-name">Candidate guide</div>
+      <div class="res-sub">Google Drive</div>
+    </a>
+    <a class="res-card" href="https://www.youtube.com/@vivahq" target="_blank" rel="noopener">
+      <div class="res-icon">▶️</div>
+      <div class="res-name">Viva on YouTube</div>
+      <div class="res-sub">@vivahq</div>
+    </a>
+    <a class="res-card" href="https://www.linkedin.com/company/vivahq/" target="_blank" rel="noopener">
+      <div class="res-icon">💼</div>
+      <div class="res-name">Viva on LinkedIn</div>
+      <div class="res-sub">Follow the page</div>
+    </a>
+    <a class="res-card" href="https://careers.execviva.com/" target="_blank" rel="noopener">
+      <div class="res-icon">🌐</div>
+      <div class="res-name">Careers site</div>
+      <div class="res-sub">Open roles</div>
+    </a>
+  </div>
+</div>
+
+<div class="referral">
+  <div class="referral-card">
+    <div class="rtag">Friends of Viva</div>
+    <h3>Know a great future EA? Refer them.</h3>
+    <p>Even before you're hired, you can join the referral program and help other great candidates find their way to Viva.</p>
+    <span class="amt">Earn ~$500+ per month through referrals</span>
+  </div>
+</div>
+
+<footer>
+  <div class="note"><b>Security reminder:</b> every official Viva message comes from an <b>@execviva.com</b> address. Report anything from Instagram, Facebook, or elsewhere to careers@execviva.com — Viva never asks for payment or personal data.</div>
+  <div class="sign">Questions any time → <b>careers@execviva.com</b></div>
+</footer>
+
+<script>
+  const fill = document.getElementById('fill');
+  const pct = document.getElementById('pct');
+  const dots = document.querySelectorAll('#dots span');
+  const ids = ['ea','day','why','process','faq','quiz'];
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    const clamped = Math.min(100, Math.max(0, scrolled));
+    fill.style.width = clamped + '%';
+    pct.textContent = Math.round(clamped) + '%';
+
+    let current = 0;
+    ids.forEach((id,i)=>{
+      const el = document.getElementById(id);
+      if(el && el.getBoundingClientRect().top < window.innerHeight*0.5) current = i;
+    });
+    dots.forEach((d,i)=> d.classList.toggle('active', i===current));
+  });
+
+  const quizData = [
+    {
+      q: "What best describes an EA's role at Viva?",
+      opts: ["Basic admin support", "A strategic partner who saves time, keeps things organized, and protects focus", "A part-time freelance assistant", "An IT support specialist"],
+      correct: 1,
+      explain: "It's the core reframe: EAs are strategic partners, not admin help."
+    },
+    {
+      q: "How many executives might you support at once?",
+      opts: ["1", "2", "Up to 3", "Up to 5"],
+      correct: 2,
+      explain: "Up to three, all from one company — most EAs support one or two."
+    },
+    {
+      q: "How many stages are in Viva's hiring process?",
+      opts: ["3", "4", "5", "6"],
+      correct: 2,
+      explain: "Application → Screening → Group interview → Skills assessment → Final interview."
+    },
+    {
+      q: "Viva's mission is built around what number?",
+      opts: ["100 jobs", "500 jobs", "1,000 jobs", "5,000 jobs"],
+      correct: 2,
+      explain: "1,000 meaningful jobs for women across Latin America — tied to UN SDG #5."
+    },
+    {
+      q: "True or false: you can work part-time at Viva while studying or holding another job.",
+      opts: ["True", "False"],
+      correct: 1,
+      explain: "False — Viva requires full-time, exclusive commitment."
+    }
+  ];
+
+  const quizRoot = document.getElementById('quiz-root');
+  const scoreEl = document.getElementById('quiz-score');
+  let score = 0;
+
+  quizData.forEach((item, qi) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    const qt = document.createElement('div');
+    qt.className = 'qtext';
+    qt.textContent = (qi+1) + '. ' + item.q;
+    card.appendChild(qt);
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'qopts';
+    item.opts.forEach((opt, oi) => {
+      const btn = document.createElement('div');
+      btn.className = 'qopt';
+      btn.textContent = opt;
+      btn.onclick = () => {
+        const allOpts = optsWrap.querySelectorAll('.qopt');
+        allOpts.forEach(o => o.classList.add('disabled'));
+        if(oi === item.correct){
+          btn.classList.add('correct');
+          score++;
+        } else {
+          btn.classList.add('wrong');
+          allOpts[item.correct].classList.add('correct');
+        }
+        card.querySelector('.qexplain').classList.add('show');
+        scoreEl.textContent = score + ' / 5 correct';
+      };
+      optsWrap.appendChild(btn);
+    });
+    card.appendChild(optsWrap);
+    const ex = document.createElement('div');
+    ex.className = 'qexplain';
+    ex.textContent = item.explain;
+    card.appendChild(ex);
+    quizRoot.appendChild(card);
+  });
+</script>
+
+</body>
+</html>
